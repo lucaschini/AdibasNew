@@ -68,7 +68,7 @@ $resultado = mysqli_query($conexao, $sql);
               aria-selected="false"
               disabled
             >
-              Olá, user!😃
+              Olá, <?php echo $_SESSION['nome']; ?>!😃
             </button>
           </li>
           <li class="nav-item" role="presentation">
@@ -110,27 +110,38 @@ $resultado = mysqli_query($conexao, $sql);
             style="padding: 1.5rem 0;"
           >
             
-          <table align=center class="table table-hover shadow-lg" style="width: 80% !important;">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>Email</th>
-                <th>Rua</th>
-                <th>Bairro</th>
-                <th>Telefone</th>
-              </tr>
-            </thead>
-            <tbody>
+          
               <?php
               while ($linha = mysqli_fetch_array($resultado)) {
-              echo "<tr>";
-              echo "<td width='5%'>" . $linha["idCliente"] . "</td>";
-              echo "<td width='20%'>" . $linha["nome"] . "</td>";
-              echo "<td width='15%'>" . $linha["email"] . "</td>";
-              echo "<td width='15%'>" . $linha["rua"] . "</td>";
-              echo "<td width='15%'>" . $linha["bairro"] . "</td>";
-              echo "<td width='15%'>" . $linha["fone"] . "</td>";
+              
+              echo '<div class="input-group mb-3">';
+              echo '<span class="input-group-text" id="basic-addon1">Nome</span>';
+              echo '<input class="form-control" type="text" value="'. $linha['nome'] . '" aria-label="Disabled input example" disabled readonly/>';
+              echo '</div>';
+
+              echo '<div class="input-group mb-3">';
+              echo '<span class="input-group-text" id="basic-addon1">Email</span>';
+              echo '<input class="form-control" type="text" value="'. $linha['email'] . '" aria-label="Disabled input example" disabled readonly/>';
+              echo '</div>';
+
+              
+
+              echo '<div class="input-group mb-3">';
+              echo '<span class="input-group-text" id="basic-addon1">Rua</span>';
+              echo '<input class="form-control" type="text" value="'. $linha['rua'] . '" aria-label="Disabled input example" disabled readonly/>';
+              echo '</div>';
+
+              echo '<div class="input-group mb-3">';
+              echo '<span class="input-group-text" id="basic-addon1">Bairro</span>';
+              echo '<input class="form-control" type="text" value="'. $linha['bairro'] . '" aria-label="Disabled input example" disabled readonly/>';
+              echo '</div>';
+
+              echo '<div class="input-group mb-3">';
+              echo '<span class="input-group-text" id="basic-addon1">Telefone</span>';
+              echo '<input class="form-control" type="text" value="'. $linha['fone'] . '" aria-label="Disabled input example" disabled readonly/>';
+              echo '</div>';
+              
+              $_SESSION['nome'] = $linha["nome"];
               $dados = "idCliente=" . $linha["idCliente"] .
                   "&nome=" . $linha["nome"] .
                   "&email=" . $linha["email"] .
@@ -138,12 +149,10 @@ $resultado = mysqli_query($conexao, $sql);
                   "&bairro=" . $linha["bairro"] .
                   "&fone=" . $linha["fone"];
                 
-                  echo "</tr>";
+                  
               }     
               mysqli_close($conexao);
               ?>
-              </tbody>
-            </table>
 
             <?php
               echo "<a href=\"alterarCliente.php?$dados\"><button type='button' class='btn btn-primary' style='margin: 1rem 0;'>Alterar dados pessoais</button></a>";

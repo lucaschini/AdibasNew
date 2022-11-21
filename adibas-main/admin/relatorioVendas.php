@@ -43,6 +43,18 @@ if ($_SESSION["funcao"] !== "gerente") {
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0" style="padding: 1.5rem 0;">
+
+                    <?php
+
+                    if (isset($_GET['date1']) && ($_GET['date1'] !== "")) {
+                        $_SESSION['date1'] = $_GET['date1'];
+                    }
+
+                    if (isset($_GET['date2']) && ($_GET['date2'] !== "")) {
+                        $_SESSION['date2'] = $_GET['date2'];
+                    }
+
+                    ?>
                     <table align=center class="table table-hover " style="width: 100% !important;">
                         <thead>
                             <tr>
@@ -57,7 +69,7 @@ if ($_SESSION["funcao"] !== "gerente") {
                         <tbody>
                             <?php
                             $conexao = mysqli_connect("localhost", "root", "", "adibas");
-                            $sql = "SELECT *  FROM `tbpedido`";
+                            $sql   = "SELECT * FROM `tbpedido` WHERE `data` = '$_SESSION[date1]'";
                             $resultado = mysqli_query($conexao, $sql);
                             while ($linha = mysqli_fetch_array($resultado)) {
                                 echo "<tr>";
@@ -70,10 +82,15 @@ if ($_SESSION["funcao"] !== "gerente") {
                                 echo "</tr>";
                             } ?>
                         </tbody>
+                        <form action="relatorioVendas.php" method="GET">
+                            De: <input type="date" name='date1'>
+                            <button type="submit">Pesquisar</button>
+                        </form>
                     </table>
                 </div>
                 <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0" style="padding: 1.5rem 0;">
-                    <table align=center class="table table-hover" style="width: 100% !important;">
+
+                    <table align=center class="table table-hover " style="width: 100% !important;">
                         <thead>
                             <tr>
                                 <th width="80">ID do Pedido</th>
@@ -87,7 +104,7 @@ if ($_SESSION["funcao"] !== "gerente") {
                         <tbody>
                             <?php
                             $conexao = mysqli_connect("localhost", "root", "", "adibas");
-                            $sql = "SELECT *  FROM `tbpedido`";
+                            $sql   = "SELECT * FROM `tbpedido` WHERE `data` >= '$_SESSION[date1]' and `data` <= '$_SESSION[date2]' ORDER BY `idCliente` DESC";
                             $resultado = mysqli_query($conexao, $sql);
                             while ($linha = mysqli_fetch_array($resultado)) {
                                 echo "<tr>";
@@ -100,6 +117,11 @@ if ($_SESSION["funcao"] !== "gerente") {
                                 echo "</tr>";
                             } ?>
                         </tbody>
+                        <form action="relatorioVendas.php" method="GET">
+                            De: <input type="date" name='date1'>
+                            até: <input type="date" name='date2'> <br>
+                            <button type="submit">Pesquisar</button>
+                        </form>
                     </table>
                 </div>
             </div>
